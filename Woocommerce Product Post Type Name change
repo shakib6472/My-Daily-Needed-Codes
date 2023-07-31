@@ -1,0 +1,30 @@
+<?php 
+
+add_filter( 'woocommerce_register_post_type_product', 'shakib_new_product_type_post' );
+	function shakib_new_product_type_post( $args ){
+		$labels = skb_lebel_adding_fun('Food','Foods');
+	   $args['labels'] = $labels;
+	   return $args;
+	}
+
+function skb_lebel_adding_fun($single,$plural){
+   $arr = array(
+      'name' => $plural,
+      'singular_name' => $single,
+      'menu_name' => $plural,
+      'add_new' => 'Add '.$single,
+      'add_new_item' => 'Add New '.$single,
+      'edit' => 'Edit',
+      'edit_item' => 'Edit '.$single,
+      'new_item' => 'New '.$single,
+      'view' => 'View '.$plural,
+      'view_item' => 'View '.$single,
+      'search_items' => 'Search '.$plural,
+      'not_found' => 'No '.$plural.' Found',
+      'not_found_in_trash' => 'No '.$plural.' Found in Trash',
+      'parent' => 'Parent '.$single
+   );
+   return $arr;
+}
+
+?>
