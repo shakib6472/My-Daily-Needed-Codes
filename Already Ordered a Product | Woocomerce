@@ -1,0 +1,22 @@
+<?php add_filter('woocommerce_is_purchasable', 'preventPurchaseIfAlreadyOrdered', 10, 2);
+
+function preventPurchaseIfAlreadyOrdered($is_purchasable, $product)
+{
+    $OrderLimit = 1;
+    $productId = $product->get_id();
+    $quantityOrderedToday = checkIsOrdered($productId);
+
+    if ($quantityOrderedToday >= $OrderLimit) {
+        $is_purchasable = false;
+    }
+
+    return $is_purchasable;
+}
+
+function checkIsOrdered($productId)
+{
+    global $wpdb;
+    $result = $wpdb->get_results("SELECT sum(product_qty) as is_ordered FROM {$wpdb->prefix}wc_order_product_lookup where product_id= {$productId}");
+
+    return $result[0]->is_ordered;
+}
