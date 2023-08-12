@@ -1,0 +1,48 @@
+
+<?php 
+
+/*===================
+ * Woocommerce Different Pricings
+ * =========================
+ * */
+
+
+
+function dynamic_location_based_pricing($price, $product) {
+  // Get the stored location from LocalStorage or Cookie
+  $storedLocation = isset($_COOKIE['location']) ? sanitize_text_field($_COOKIE['location']) : '';
+	
+  // Retrieve the ACF custom field value based on the stored location
+  // Getting ACF Field of Product Location Priicing
+	if ("Bergen County" == $storedLocation) {
+  $custom_field_key = 'for_bergen_county'; //Input Your Custom Meta fields
+} else if ("New York" == $storedLocation) {
+  $custom_field_key = 'for_new_york'; 
+} else if ("Fairfield County" == $storedLocation) {
+  $custom_field_key = 'for_fairfield_county'; 
+} else if ("Miami-Wade, Broward and Palm Beach Counties" == $storedLocation) {
+  $custom_field_key = 'for_miami-wade'; 
+} else if ("Clark County" == $storedLocation) {
+  $custom_field_key = 'for_clark_county'; 
+} else if ("Cook County" == $storedLocation) {
+  $custom_field_key = 'for_cook_county'; 
+} else if ("North Dallas" == $storedLocation) {
+  $custom_field_key = 'for_north_dallas'; 
+} 
+
+ // Getting the Price FromACF field
+  $location_price = get_field($custom_field_key, $product->get_id());
+
+  // If a location-specific price is available, use it
+  if ($location_price && $storedLocation) {
+    // Adjust product price based on location-specific price
+    $price = $location_price;
+  }
+
+  return $price;
+}
+
+// Filter to add Custom Pricing in the frontEnd
+add_filter('woocommerce_get_price', 'dynamic_location_based_pricing', 10, 2);
+
+?>
