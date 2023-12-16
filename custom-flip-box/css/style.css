@@ -1,0 +1,150 @@
+*, *:after, *:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.rp-white{
+    color: #fff;
+}
+.rp-black{
+    color: #000;
+}
+
+#flip-card {
+  width: 300px;
+  min-height: 400px;
+  text-align: center;
+  -o-transition: all 1s ease-in-out;
+  -webkit-transition: all 1s ease-in-out;
+  -ms-transition: all 1s ease-in-out;
+  transition: all 1s ease-in-out;
+  -o-transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+.do-flip {
+  -o-transform: rotateY(-180deg);
+  -webkit-transform: rotateY(-180deg);
+  -ms-transform: rotateY(-180deg);
+  transform: rotateY(-180deg);
+}
+
+#flip-card .flip-card-front, #flip-card .flip-card-back {
+    max-width: 300px;
+    width: 300px;
+    min-height: 370px;
+    position: absolute;
+    -o-backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden;
+    z-index: 2;
+    -webkit-box-shadow: 5px 6px 32px 2px rgba(133,133,133,0.71);
+    -moz-box-shadow: 5px 6px 32px 2px rgba(133,133,133,0.71);
+    box-shadow: 5px 6px 32px 2px rgba(133,133,133,0.71);
+}
+#flip-card .flip-card-front, #flip-card .flip-card-back {
+    background: #636164;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+    justify-content: space-between;
+    height: 100%;
+    min-height: 400px;
+}
+#flip-card .flip-card-back {
+    background: #000000;
+    -o-transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+}
+h1.rp-flip-heading {
+    font-size: 26px;
+}
+.rp-flip-btn {
+    background: #636164;
+    padding: 20px;
+    width: 100%;
+    border: 4px solid red;
+    border-radius: 20px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffffff;
+    box-shadow: 0 0 15px #fff;
+    transition: 0.3s;
+    cursor: pointer;
+}
+button#flip-card-btn-turn-to-front {
+    background: #000;
+    box-shadow: 0 0 20px #ffa0a0;
+    border: 0;
+}
+.rp-flip-btn.rp-back-btn {
+    width: 100%;
+    display: block;
+    text-decoration: none;
+    border: 0;
+    box-shadow: 0 0 20px #ff6a6a;
+}
+
+.info-wrapper span {
+    display: block;
+    font-weight: 400;
+}
+.info-wrapper {
+    text-align: left;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+}
+.info-wrapper label {
+    font-weight: 600;
+    font-size: 18px;
+    color: #fff;
+}
+.login-data {
+    display: flex;
+    justify-content: space-between;
+}
+.container-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.flip-card-front img {
+    width: 75%;
+    margin: 0 auto;
+}
+.login-data button img {
+    width: 20px;
+    height: 20px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.login-data button {
+    background: none;
+    box-shadow: none;
+    border: none;
+    height: 35px;
+    padding: 0 10px;
+    border-radius: 4px;
+    color: #ffffff;
+}
+.login-data button:hover {
+    color: #000000;
+    background: #fff;
+    height: 35px;
+    padding: 0 10px;
+    border-radius: 4px;
+}
+
+.rp-flip-btn:hover {
+    background: #323232;
+}
+.rp-flip-btn.rp-back-btn:hover {
+    color: #ffffff;
+}
