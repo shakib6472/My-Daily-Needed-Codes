@@ -1,0 +1,17 @@
+// Activation Hook
+register_activation_hook(__FILE__, 'your_plugin_activation_function');
+
+// Deactivation Hook
+register_deactivation_hook(__FILE__, 'your_plugin_deactivation_function');
+
+// Activation function
+function your_plugin_activation_function() {
+    // Your activation code here
+    // For example, create database tables or set default options
+}
+
+// Deactivation function
+function your_plugin_deactivation_function() {
+    // Your deactivation code here
+    // For example, delete database tables or clean up options
+}
