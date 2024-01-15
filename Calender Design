@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Calendar</title>
+    <style>
+        /* Add your custom styles here */
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .day {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="controls">
+    <button id="prev-month">Previous Month</button>
+    <span id="current-month"></span>
+    <button id="next-month">Next Month</button>
+</div>
+
+<div id="custom-calendar" class="calendar">
+    <!-- Days will be dynamically added here with JavaScript -->
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script >
+$(document).ready(function () {
+    // Get the current date
+    var currentDate = new Date();
+    var currentMonth = currentDate.getMonth();
+    var currentYear = currentDate.getFullYear();
+
+    // Call a function to generate and display the calendar
+    displayCalendar(currentYear, currentMonth);
+
+    // Add event listeners for navigation buttons
+    $('#prev-month').on('click', function () {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        displayCalendar(currentYear, currentMonth);
+    });
+
+    $('#next-month').on('click', function () {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        displayCalendar(currentYear, currentMonth);
+    });
+});
+
+function displayCalendar(year, month) {
+    // Clear existing days
+    $('#custom-calendar').empty();
+
+    // Update the current month display
+    $('#current-month').text(getMonthName(month) + ' ' + year);
+
+    // Get the number of days in the month
+    var daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // Add day cells to the calendar
+    for (var day = 1; day <= daysInMonth; day++) {
+        $('#custom-calendar').append('<div class="day">' + day + '</div>');
+    }
+}
+
+function getMonthName(month) {
+    var monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    return monthNames[month];
+}
+
+</script>
+</body>
+</html>
