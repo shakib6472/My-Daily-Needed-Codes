@@ -1,7 +1,7 @@
 <?php /*
- * Plugin Name:       boikotha
+ * Plugin Name:       PLugin Name
  * Plugin URI:        https://facebook.com/shakib6472/
- * Description:       This is the boikotha websites Custom Plugin. All features are came from here.
+ * Description:       Description
  * Version:           1.0.0
  * Requires at least: 5.2
  * Requires PHP:      7.2
@@ -14,4 +14,23 @@
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
+}
+
+
+// Activation Hook
+register_activation_hook(__FILE__, 'your_plugin_activation_function');
+
+// Deactivation Hook
+register_deactivation_hook(__FILE__, 'your_plugin_deactivation_function');
+
+// Activation function
+function your_plugin_activation_function() {
+    // Your activation code here
+    // For example, create database tables or set default options
+}
+
+// Deactivation function
+function your_plugin_deactivation_function() {
+    // Your deactivation code here
+    // For example, delete database tables or clean up options
 }
