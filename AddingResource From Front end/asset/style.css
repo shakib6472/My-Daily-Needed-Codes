@@ -1,0 +1,124 @@
+.ur-frontend-form button,
+.ur-frontend-form input[type="submit"],
+.ur-frontend-form button[type="submit"] {
+  padding: 10px 20px;
+  background: #352573;
+  line-height: 1.5;
+  text-align: center;
+  word-break: break-word;
+  white-space: normal;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: 0.35s all ease-out;
+}
+
+.tutor-dashboard .tutor-dashboard-left-menu i {
+  font-size: 24px;
+  color: var(--tutor-color-primary);
+  width: 30px;
+}
+
+.tutor-dashboard
+  .tutor-dashboard-left-menu
+  .tutor-dashboard-menu-item.active
+  i {
+  color: var(--tutor-color-white);
+}
+
+button.btn.btn-success.login-button-id {
+  background-color: #e7fdff;
+  color: #000000;
+  border: 0px;
+  transition: all 0.3s;
+}
+button.btn.btn-success.login-button-id:hover {
+  background-color: #abcbce;
+}
+
+.buton .add-a-new-child {
+  background-color: #fff0c9;
+  transition: all 0.3s;
+}
+.buton .add-a-new-child:hover {
+  background-color: #d7c390;
+}
+
+.tutor-dashboard .tutor-dashboard-content .tutor-capitalize-text {
+  text-transform: capitalize;
+  border-bottom: 2px solid #2b7f58;
+}
+
+@media (min-width: 1200px) {
+  body .tutor-container-xxl,
+  body .tutor-container-xl,
+  body .tutor-container-lg,
+  body .tutor-container-md,
+  body .tutor-container-sm,
+  body .tutor-container {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+.loading-overlay {
+  display: none;
+  background: rgba(255, 255, 255, 0.7);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 9998;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-overlay.is-active {
+  display: flex;
+}
+
+.code {
+  font-family: monospace;
+  /*   font-size: .9em; */
+  color: #dd4a68;
+  background-color: rgb(238, 238, 238);
+  padding: 0 3px;
+}
+
+.error {
+  display: none;
+}
+
+.error .error-text {
+  color: red;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.row .form-group label {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.tutor-dashboard
+  .tutor-dashboard-content
+  .tutor-capitalize-text
+  .tutor-dashboard-title {
+  text-transform: capitalize;
+  border-bottom: 2px solid #2b7f58;
+}
+
+
+body .tutor-dashboard .tutor-dashboard-left-menu .tutor-dashboard-menu-item-link {
+    font-weight: 600;
+}
+
+body .tutor-col-12.tutor-col-md-4.tutor-col-lg-3.tutor-dashboard-left-menu {
+    width: 20%;
+}
+body .tutor-dashboard .tutor-dashboard-content .tutor-capitalize-text {
+    text-transform: capitalize;
+    display: inline-block;
+}
+
+
