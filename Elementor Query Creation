@@ -1,0 +1,36 @@
+
+<?php 
+/*
+ * 'membersprofile' This is the Query Here
+
+*/
+
+function membersprofile_filter($query)
+{
+    // Check if this is the query we want to customize
+    // Set post type to 'member-profile'
+    $query->set('post_type', 'member-profile');
+
+    // Set the number of posts to 1
+    $query->set('posts_per_page', 9);
+
+    $search = isset($_GET['search']) ? $_GET['search'] : false;
+    $type = isset($_GET['type']) ? $_GET['type'] : false;
+
+    if ($search && $type) {
+        // Create a tax query to filter by the 'position' taxonomy
+        $tax_query = array(
+            array(
+                'taxonomy' => $type, // Your taxonomy name
+                'field' => 'name', // Search by term name
+                'terms' => $search,
+                'operator' => 'IN', // Use LIKE to search for similar terms
+            ),
+        );
+
+        $query->set('tax_query', $tax_query);
+    }
+}
+
+add_action('elementor/query/membersprofile', 'membersprofile_filter');
+
