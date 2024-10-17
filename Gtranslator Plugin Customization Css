@@ -1,0 +1,29 @@
+
+body .gt_switcher .gt_selected a {
+    border: none !important;
+    color: #000000 !important;
+    padding: 3px 5px !important;
+    width: 161px !important;
+}
+body .gt_switcher .gt_option {
+    position: absolute !important;
+}
+body .gt_switcher .gt_selected a {
+    background: #ffffff00 !important;
+    border: none !important;
+    color: #000 !important;
+    font-family: 'Teko' !important;
+    font-size: 21px !important;
+}
+body .gt_switcher .gt_selected a img {
+    margin-right: 10px !important;
+}
+body .gt_switcher .gt_selected {
+    background: #ffffff00 !important;
+    font-family: 'Teko' !important;
+    font-size: 21px !important;
+}
+body .gt_switcher {
+    font-family: 'Teko' !important;
+    font-size: 21px !important;
+}
