@@ -23,7 +23,6 @@ body .gt_switcher .gt_selected {
     font-family: 'Teko' !important;
     font-size: 21px !important;
 }
-body .gt_switcher {
-    font-family: 'Teko' !important;
+body .gt_switcher { 
     font-size: 21px !important;
 }
