@@ -24,7 +24,7 @@ class footer_menu
                 </div>
             </div>
         </div>
-       -->
+       --> 
 
 
 <?php
