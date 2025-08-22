@@ -14,7 +14,8 @@ function preventPurchaseIfAlreadyOrdered($is_purchasable, $product)
 }
 
 function checkIsOrdered($productId)
-{
+{ 
+
     global $wpdb;
     $result = $wpdb->get_results("SELECT sum(product_qty) as is_ordered FROM {$wpdb->prefix}wc_order_product_lookup where product_id= {$productId}");
 
