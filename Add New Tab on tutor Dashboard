@@ -1,6 +1,6 @@
 <php 
 
-/*add a tab i want*/
+/*add a tab I want*/
 function add_some_links_dashboard($links)
 {
 
@@ -20,5 +20,6 @@ function add_some_links_dashboard($links)
 	return $links;
 }
 add_filter('tutor_dashboard/instructor_nav_items', 'add_some_links_dashboard');
+add_filter('tutor_dashboard/nav_items', 'add_some_links_dashboard');
 
 ?>
