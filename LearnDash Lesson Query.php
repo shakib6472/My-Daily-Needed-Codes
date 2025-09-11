@@ -12,7 +12,7 @@ function lesson_query($query)
         $meta_query[] = [
             'key' => $course_meta_key,
             'value' => $course_id,
-            'compare' => '='
+            'compare' => '=' 
         ];
         $query->set('meta_query', $meta_query);
 
