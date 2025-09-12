@@ -1,6 +1,7 @@
 <?php 
 /*
-* Shortcode [emedi_course_quizz_count]
+* Shortcode [shakib_course_quizz_count]
+* Count The Quizz
 */
  function sh_get_course_quizz_count()
     {
@@ -35,7 +36,7 @@
         }
     }
 
- add_shortcode('emedi_course_quizz_count',  'sh_get_course_quizz_count');
+ add_shortcode('shakib_course_quizz_count',  'sh_get_course_quizz_count');
 
 
 ?>
