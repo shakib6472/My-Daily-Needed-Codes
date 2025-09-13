@@ -5,15 +5,11 @@
 function lesson_single_page_lesson_query($query) {
     // 1) Resolve $course_id first
     $course_id = 0; 
-    if ( !empty($_SERVER['REQUEST_URI']) ) {
-        $request_uri = wp_unslash( $_SERVER['REQUEST_URI'] ); // sanitize server var
-        if ( preg_match( '#/courses/([^/]+)/#', $request_uri, $m ) ) {
-            $course_slug = sanitize_title( $m[1] );
-            // LearnDash course post type is usually 'sfwd-courses'
-            $course_post = get_page_by_path( $course_slug, OBJECT, 'sfwd-courses' );
-            if ( $course_post instanceof WP_Post ) {
-                $course_id = (int) $course_post->ID;
-            }
+    if ( function_exists('learndash_get_course_id') ) {
+        // get_queried_object_id() is safer than get_the_ID() inside this hook
+        $current_id = get_queried_object_id();
+        if ( $current_id ) {
+            $course_id = (int) learndash_get_course_id( $current_id );
         }
     }
 
