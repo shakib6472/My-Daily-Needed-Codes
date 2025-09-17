@@ -5,7 +5,7 @@
 
 */
 
-function membersprofile_filter($query)
+function membersprofile_filter($query) 
 {
     // Check if this is the query we want to customize
     // Set post type to 'member-profile'
