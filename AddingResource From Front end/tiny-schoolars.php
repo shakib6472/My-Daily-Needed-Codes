@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
  
-$plugin_url = plugin_dir_path(__FILE__); 
+$plugin_url = plugin_dir_path(__FILE__);  
 // require_once(__DIR__ . '/shortcode/dashboard.php');
 require_once(__DIR__ . '/dashboard/left-menu.php');
 require_once(__DIR__ . '/dashboard/footer.php');
@@ -73,3 +73,4 @@ function tiny_schoolars_deactivation_function() {
     // Your deactivation code here
     // For example, delete database tables or clean up options
 }
+
