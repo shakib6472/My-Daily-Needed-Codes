@@ -1,0 +1,4 @@
+// ✅ Change the "Place order" button text on checkout page
+add_filter( 'woocommerce_order_button_text', function( $button_text ) {
+    return 'Complete Enrollment';
+});
