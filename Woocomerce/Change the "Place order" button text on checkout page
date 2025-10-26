@@ -1,4 +1,22 @@
 // ✅ Change the "Place order" button text on checkout page
-add_filter( 'woocommerce_order_button_text', function( $button_text ) {
-    return 'Complete Enrollment';
+// add_filter( 'woocommerce_order_button_text', function( $button_text ) {
+//     return 'Complete Enrollment';
+// });
+
+// ✅ Change button text & add subtext under it
+add_filter( 'woocommerce_order_button_html', function( $button_html ) {
+
+    // Main button text changed
+    $button_html = str_replace(
+        'Place order',
+        'Complete Enrollment',
+        $button_html
+    );
+
+    // Add subtext right below the button
+    $sub_text = '<p class="order-subtext" style="margin-top:6px; margin-bottom:6px; font-size:13px; color:#555; line-height:1.4;">
+        Your payment will confirm your seat and secure your spot in the selected training program.
+    </p>';
+
+    return  $sub_text . $button_html;
 });
