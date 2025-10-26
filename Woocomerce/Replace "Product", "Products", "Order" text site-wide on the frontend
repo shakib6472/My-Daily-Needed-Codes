@@ -1,0 +1,32 @@
+// ✅ Replace "Product" / "Products" / "Order" text site-wide on the frontend
+add_filter( 'gettext', function( $translated_text, $text, $domain ) {
+
+    // Only affect WooCommerce strings
+    if ( $domain === 'woocommerce' ) {
+
+        switch ( $text ) {
+            // Singular
+            case 'Product':
+                $translated_text = 'Program';
+                break;
+
+            // Plural
+            case 'Products':
+                $translated_text = 'Programs';
+                break;
+
+            // Order headings and buttons
+            case 'Order':
+                $translated_text = 'Program Order';
+                break;
+
+            case 'Your order':
+            case 'Your Order':
+                $translated_text = 'Your Program Order';
+                break;
+        }
+    }
+
+    return $translated_text;
+
+}, 20, 3 );
