@@ -1,0 +1,9 @@
+ 
+// Change the Add to Cart button text sitewide
+add_filter('woocommerce_product_add_to_cart_text', 'custom_enroll_button_text');  
+add_filter('woocommerce_product_single_add_to_cart_text', 'custom_enroll_button_text');
+
+function custom_enroll_button_text($text) {
+    // Change the button text
+    return __('Reserve Your Seat', 'woocommerce');
+}
