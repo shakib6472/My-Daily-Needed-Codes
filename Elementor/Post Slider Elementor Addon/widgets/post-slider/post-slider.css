@@ -1,0 +1,72 @@
+
+.container .image-box img {
+    width: 99%;
+}
+
+.container .headline h3 {
+    text-align: left;
+    font-size: 40px;
+    color: #0646A5;
+    font-family: Helvetica, sans-serif;
+    font-style: italic;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.container .informations ul li {
+    text-align: left;
+    font-size: 21px;
+    color: #1f1f1f;
+    font-family: Helvetica, sans-serif;
+    font-weight: 400;
+    list-style: square;
+    list-style-type: square;
+}
+
+.container .informations ul li::marker {
+    font-size: 32px;
+    color: #0646A5;
+}
+
+
+.slider-item {
+    flex: 0 0 100%;
+    box-sizing: border-box;
+    opacity: 1;
+}
+
+.slider-box {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+}
+
+
+
+.slider-container {
+    display: flex;
+    width: 300%;
+    transition: transform 1.5s ease;
+    /* 100% for each slide */
+}
+
+.arrow {
+    cursor: pointer;
+    position: absolute;
+    top: 10%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+}
+
+.arrow.left {
+    left: -32px;
+    background: url('https://constructserver.de/spitznagel.de/wp-content/uploads/2024/01/Polygon-1.png') no-repeat;
+    background-size: cover;
+}
+
+.arrow.right {
+    right: -32px;
+    background: url('https://constructserver.de/spitznagel.de/wp-content/uploads/2024/01/Polygon-2.png') no-repeat;
+    background-size: cover;
+}
