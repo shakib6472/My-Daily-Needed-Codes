@@ -5,7 +5,7 @@
  * Elementor widget that inserts an embbedable content into the page, from any given URL.
  *
  * @since 1.0.0
- */
+ */ 
 class Hello_World_Widget extends \Elementor\Widget_Base {
 
 	/**
