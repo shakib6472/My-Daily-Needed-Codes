@@ -5,7 +5,7 @@ function auto_enroll_member_in_course() {
     // Check if user is logged in
     if (is_user_logged_in()) {
         $user_id = get_current_user_id();
-        
+         
         // Check if user has membership ID 2
         if (pmpro_hasMembershipLevel(1, $user_id) || pmpro_hasMembershipLevel(2, $user_id)) {
             $course_id = 437;
