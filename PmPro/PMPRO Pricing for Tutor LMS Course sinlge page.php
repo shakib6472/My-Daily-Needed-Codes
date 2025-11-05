@@ -5,7 +5,7 @@
  * Tutor LMS
  *  Edumall Theme
  */
-
+ 
 add_action('tutor_course/single/enroll_box/after_thumbnail', function () {
     if (!is_singular('courses')) {
         return;
