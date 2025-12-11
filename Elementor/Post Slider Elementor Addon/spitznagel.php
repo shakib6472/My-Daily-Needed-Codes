@@ -47,7 +47,7 @@ function elementor_spitznagel_core_adding($widgets_manager)
 }
 add_action('elementor/widgets/register', 'elementor_spitznagel_core_adding');
 
-
+ 
 
 
 
