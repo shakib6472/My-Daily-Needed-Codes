@@ -1,0 +1,154 @@
+
+/* Outer wrapper */
+.tutor-dashboard-content-inner.tutor-dashboard-profile-data { 
+    margin: 0 auto;
+    padding: 24px 24px 8px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+}
+
+/* Section title (My Profile) */
+.tutor-dashboard-content > .tutor-fs-5.tutor-fw-medium.tutor-color-black {
+    margin-bottom: 18px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+}
+
+/* Each row */
+.tutor-dashboard-profile-data .tutor-row.tutor-mb-24 {
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Remove border from last row */
+.tutor-dashboard-profile-data .tutor-row.tutor-mb-24:last-child {
+    border-bottom: none;
+}
+
+/* Label (left column) */
+.tutor-dashboard-profile-data .tutor-col-12.tutor-col-sm-5.tutor-col-lg-3 span.tutor-fs-6.tutor-color-secondary {
+    display: block;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #6b7280;
+}
+
+/* Value (right column) */
+.tutor-dashboard-profile-data .tutor-col-12.tutor-col-sm-7.tutor-col-lg-9 span.tutor-fs-6 {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    color: #111827;
+}
+
+/* Dim placeholder dashes / empty values */
+.tutor-dashboard-profile-data span.tutor-fs-6.tutor-fw-medium.tutor-color-black:contains("-"),
+.tutor-dashboard-profile-data span.tutor-fs-6.tutor-color-secondary p {
+    color: #9ca3af;
+}
+
+/* Biography paragraph spacing */
+.tutor-dashboard-profile-data span.tutor-fs-6.tutor-color-secondary p {
+    margin: 0;
+}
+
+/* Make layout breathe more on small screens */
+@media (max-width: 767px) {
+    .tutor-dashboard-content-inner.tutor-dashboard-profile-data {
+        padding: 18px 16px 4px;
+        border-radius: 10px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .tutor-dashboard-profile-data .tutor-row.tutor-mb-24 {
+        padding: 8px 0;
+    }
+}
+
+/* Header wrapper row */
+.tutor-frontend-dashboard-header.tutor-row {
+    align-items: center;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+}
+
+/* Left side: avatar + text */
+.tutor-frontend-dashboard-header .tutor-header-left-side {
+    border: none !important;
+    align-items: center;
+}
+
+/* Avatar */
+.tutor-dashboard-header-avatar .tutor-avatar.tutor-avatar-xl {
+    width: 64px;
+    height: 64px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+/* Avatar initials */
+.tutor-dashboard-header-avatar .tutor-avatar-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* Spacing between avatar and user info */
+.tutor-frontend-dashboard-header .tutor-user-info {
+    margin-left: 20px;
+}
+
+/* Greeting text */
+.tutor-dashboard-header-greetings {
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+    margin-bottom: 2px;
+}
+
+/* User name */
+.tutor-dashboard-header-username {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+}
+
+/* Right side (for buttons / stats later) */
+.tutor-frontend-dashboard-header .tutor-header-right-side {
+    justify-content: flex-end;
+}
+
+/* Responsive tweaks */
+@media (max-width: 767px) {
+    .tutor-frontend-dashboard-header.tutor-row {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px 15px;
+    }
+
+    .tutor-frontend-dashboard-header .tutor-header-left-side {
+        margin-bottom: 10px;
+    }
+
+    .tutor-frontend-dashboard-header .tutor-header-right-side {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 8px;
+    }
+}
+
+
