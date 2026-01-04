@@ -1,0 +1,138 @@
+
+
+/* Wrapper */
+#tutor-registration-wrap {
+    max-width: 900px;
+    margin: 120px auto;
+    padding: 30px 25px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+/* Form grid: ensure 2 columns on desktop */
+#tutor-registration-wrap .tutor-form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Half-width columns */
+#tutor-registration-wrap .tutor-form-col-6 {
+    width: calc(50% - 10px);
+}
+
+/* Full-width columns */
+#tutor-registration-wrap .tutor-form-col-12 {
+    width: 100%;
+}
+
+/* Labels */
+#tutor-registration-wrap .tutor-form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Inputs + password fields */
+#tutor-registration-wrap input[type="text"],
+#tutor-registration-wrap input[type="email"],
+#tutor-registration-wrap input[type="password"],
+#tutor-registration-wrap input[type="tel"],
+#tutor-registration-wrap .tutor-form-group .tutor-form-wrap input {
+    width: 100%;
+    padding: 11px 12px;
+    font-size: 14px;
+    line-height: 1.4;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background-color: #f9fafb;
+    color: #111827;
+    box-shadow: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+/* Focus state */
+#tutor-registration-wrap input[type="text"]:focus,
+#tutor-registration-wrap input[type="email"]:focus,
+#tutor-registration-wrap input[type="password"]:focus,
+#tutor-registration-wrap input[type="tel"]:focus {
+    outline: none;
+    border-color: #2563eb;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.15);
+}
+
+/* Password visibility icon alignment */
+#tutor-registration-wrap .tutor-password-field {
+    position: relative;
+}
+
+#tutor-registration-wrap .tutor-password-field .show-hide-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Password strength section spacing */
+#tutor-registration-wrap .tutor-password-strength-hint {
+    margin-top: 6px;
+}
+
+/* Submit button */
+#tutor-registration-wrap button.tutor-btn-primary,
+#tutor-registration-wrap .tutor-btn.tutor-btn-primary.tutor-btn-block {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: none;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(135deg, #02ae5c, #02ee5c);
+    color: #ffffff;
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+#tutor-registration-wrap button.tutor-btn-primary:hover,
+#tutor-registration-wrap .tutor-btn.tutor-btn-primary.tutor-btn-block:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 30px rgba(37, 99, 235, 0.45);
+    background: linear-gradient(135deg, #02ee5c, #02ae5c);
+}
+
+#tutor-registration-wrap button.tutor-btn-primary:active,
+#tutor-registration-wrap .tutor-btn.tutor-btn-primary.tutor-btn-block:active {
+    transform: translateY(0);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.25);
+}
+
+/* Small helper: reduce extra bottom margin in groups */
+#tutor-registration-wrap .tutor-form-group {
+    margin-bottom: 16px;
+}
+
+/* Responsive: 1 column on small screens */
+@media (max-width: 767px) {
+    #tutor-registration-wrap {
+        padding: 20px 15px;
+        margin: 20px auto;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    }
+
+    #tutor-registration-wrap .tutor-form-col-6,
+    #tutor-registration-wrap .tutor-form-col-12 {
+        width: 100%;
+    }
+
+    #tutor-registration-wrap .tutor-form-row {
+        gap: 16px;
+    }
+}
+
+
