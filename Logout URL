@@ -1,0 +1,3 @@
+add_shortcode('logout_url', function () {
+    return wp_logout_url();
+});
