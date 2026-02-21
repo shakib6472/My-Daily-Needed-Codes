@@ -1,0 +1,31 @@
+/**
+ * Secure Admin Login As User
+ * Usage:
+ * Generate URL via:
+ * wp_nonce_url( home_url( '/?skb_loginid=123' ), 'skb_login_as_user_123' );
+ */
+
+add_action('init', function () {
+
+    if ( ! isset($_GET['skb_loginid']) ) {
+        return;
+    }
+
+    if ( ! is_user_logged_in() ) {
+        return;
+    }
+ 
+    $user_id = intval($_GET['skb_loginid']);
+
+    if ( ! $user_id || ! get_user_by('id', $user_id) ) {
+        wp_die('Invalid user.');
+    }
+ 
+    wp_clear_auth_cookie();
+    wp_set_current_user($user_id);
+    wp_set_auth_cookie($user_id);
+
+    wp_redirect(home_url());
+    exit;
+});
+
