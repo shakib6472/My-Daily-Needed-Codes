@@ -1,0 +1,54 @@
+/**
+ * Tutor LMS Course Price Shortcode (Bulletproof)
+ * Usage: [tutor_course_price]
+ */
+function kanai_tutor_course_price_shortcode() {
+
+    // Tutor LMS active
+    if ( ! function_exists('tutor') ) {
+        return '';
+    }
+
+    $course_id = get_the_ID();
+    if ( ! $course_id ) {
+        return '';
+    }
+
+    /**
+     * 1️⃣ Check Tutor course price type (MOST IMPORTANT)
+     */
+    $price_type = get_post_meta($course_id, '_tutor_course_price_type', true);
+
+    if ( $price_type === 'free' ) {
+        return '<span class="tutor-course-free">Free</span>';
+    }
+
+    /**
+     * 2️⃣ Paid course → WooCommerce price
+     */
+    if ( ! function_exists('wc_get_product') ) {
+        return '<span class="tutor-course-free">Free</span>';
+    }
+
+    $product_id = tutor_utils()->get_course_product_id($course_id);
+
+    if ( ! $product_id ) {
+        return '<span class="tutor-course-free">Free</span>';
+    }
+
+    $product = wc_get_product($product_id);
+
+    if ( ! $product ) {
+        return '<span class="tutor-course-free">Free</span>';
+    }
+
+    $price = $product->get_price();
+
+    if ( $price && floatval($price) > 0 ) {
+        return '<span class="tutor-course-price">' . wc_price($price) . '</span>';
+    }
+
+    return '<span class="tutor-course-free">Free</span>';
+}
+
+add_shortcode('tutor_course_price', 'kanai_tutor_course_price_shortcode');
