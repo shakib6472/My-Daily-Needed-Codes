@@ -1,0 +1,51 @@
+/* Tutor LMS Price Shortcode (With Sale Support) */
+function shakib_tutor_course_price_shortcode( $atts ) {
+
+    $atts = shortcode_atts( array(
+        'id' => get_the_ID(),
+    ), $atts );
+
+    $course_id = intval( $atts['id'] );
+
+    if ( ! $course_id ) {
+        return '';
+    }
+
+    $price_type = get_post_meta( $course_id, '_tutor_course_price_type', true );
+    $regular_price = get_post_meta( $course_id, 'tutor_course_price', true );
+    $sale_price    = get_post_meta( $course_id, 'tutor_course_sale_price', true );
+
+    // Handle array format (as in your metadata dump)
+    if ( is_array( $price_type ) ) {
+        $price_type = $price_type[0] ?? '';
+    }
+
+    if ( is_array( $regular_price ) ) {
+        $regular_price = $regular_price[0] ?? '';
+    }
+
+    if ( is_array( $sale_price ) ) {
+        $sale_price = $sale_price[0] ?? '';
+    }
+
+    if ( $price_type === 'free' ) {
+        return 'Free';
+    }
+
+    if ( $price_type === 'paid' ) {
+
+        $final_price = floatval( $regular_price );
+
+        if ( floatval( $sale_price ) > 0 ) {
+            $final_price = floatval( $sale_price );
+        }
+
+        $formatted_price = number_format( $final_price, 2, ',', '.' );
+
+        return 'Preis: ' . esc_html( $formatted_price ) . '€';
+    }
+
+    return '';
+}
+
+add_shortcode( 'tutor_price', 'shakib_tutor_course_price_shortcode' );
