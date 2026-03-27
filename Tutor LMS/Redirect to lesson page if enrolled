@@ -1,0 +1,44 @@
+add_action('template_redirect', 'skb_redirect_enrolled_user_to_first_lesson');
+
+function skb_redirect_enrolled_user_to_first_lesson() {
+
+    // 1. Only run on single course page
+    if (!function_exists('tutor_utils') || !is_singular('courses')) {
+        return;
+    }
+
+    // 2. User must be logged in
+    if (!is_user_logged_in()) {
+        return;
+    }
+
+    $user_id  = get_current_user_id();
+    $course_id = get_the_ID();
+
+    // 3. Check if user is enrolled
+    if (!tutor_utils()->is_enrolled($course_id, $user_id)) {
+        return;
+    }
+
+    // 4. Get course contents (topics + lessons)
+    $course_contents = tutor_utils()->get_course_contents_by_id($course_id);
+
+    if (empty($course_contents)) {
+        return;
+    }
+
+    // 5. Find first lesson
+    foreach ($course_contents as $content) {
+
+        // lessons are post_type = lesson
+        if (isset($content->post_type) && $content->post_type === 'lesson') {
+
+            $lesson_link = get_permalink($content->ID);
+
+            if ($lesson_link) {
+                wp_redirect($lesson_link);
+                exit;
+            }
+        }
+    }
+}
