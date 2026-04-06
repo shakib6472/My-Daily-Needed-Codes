@@ -1,5 +1,5 @@
 /** Tutor LMS Price Shortcode */
-wp-admin/admin.php?page=snippets
+wp-admin/admin.php?page=snippets 
 
 /* Tutor LMS Price Shortcode (With Sale Support) */
 function shakib_tutor_course_price_shortcode( $atts ) {
