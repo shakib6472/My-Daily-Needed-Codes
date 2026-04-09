@@ -1,0 +1,390 @@
+ 
+
+class SKB_Daily_Stats_Email {
+
+	const RECIPIENT = 'mail@pascalheimlicher.com';
+	const TIMEZONE  = 'Europe/Stockholm';
+	const CRON_HOOK = 'skb_daily_stats_email_hourly';
+
+	public function __construct() {
+		add_action('init', [$this, 'schedule_cron']);
+		add_action(self::CRON_HOOK, [$this, 'send_hourly_email']);
+
+		add_action('admin_menu', [$this, 'admin_menu']);
+		add_action('admin_post_skb_dse_preview', [$this, 'preview_email']);
+		add_action('admin_post_skb_dse_send_test', [$this, 'send_test_email']);
+	}
+
+	public function schedule_cron() {
+		if (!wp_next_scheduled(self::CRON_HOOK)) {
+			wp_schedule_event(time() + 60, 'hourly', self::CRON_HOOK);
+		}
+	}
+
+	public function admin_menu() {
+		add_management_page(
+			'Daily Stats Email',
+			'Daily Stats Email',
+			'manage_options',
+			'skb-daily-stats-email',
+			[$this, 'admin_page']
+		);
+	}
+
+	private function get_stockholm_window() {
+		$tz = new DateTimeZone(self::TIMEZONE);
+
+		$start = new DateTime('today', $tz);
+		$end   = new DateTime('tomorrow', $tz);
+
+		$start->setTimezone(new DateTimeZone('UTC'));
+		$end->setTimezone(new DateTimeZone('UTC'));
+
+		return [
+			'start_utc' => $start->format('Y-m-d H:i:s'),
+			'end_utc'   => $end->format('Y-m-d H:i:s'),
+		];
+	}
+
+	private function get_website_name() {
+		return wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES);
+	}
+
+	private function get_user_label($user_id) {
+		$user = get_user_by('id', $user_id);
+
+		if (!$user) {
+			return '';
+		}
+
+		$name  = trim((string) $user->display_name);
+		$email = trim((string) $user->user_email);
+
+		if ($name && $email) {
+			return $name . ' (' . $email . ')';
+		}
+
+		if ($name) {
+			return $name;
+		}
+
+		if ($email) {
+			return $email;
+		}
+
+		return 'User #' . absint($user_id);
+	}
+
+	private function parse_course_user_ids($course_id) {
+		$raw = get_post_meta($course_id, 'wrld_course_users', true);
+
+		if (is_string($raw)) {
+			$raw = maybe_unserialize($raw);
+		}
+
+		if (is_string($raw)) {
+			$raw = maybe_unserialize($raw);
+		}
+
+		if (!is_array($raw)) {
+			return [];
+		}
+
+		return array_values(array_unique(array_filter(array_map('absint', $raw))));
+	}
+
+	private function get_students_debug_data() {
+		$course_ids = get_posts([
+			'post_type'      => 'sfwd-courses',
+			'post_status'    => ['publish', 'private', 'draft'],
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'orderby'        => 'ID',
+			'order'          => 'ASC',
+		]);
+
+		$students      = [];
+		$missing_users = [];
+
+		if (empty($course_ids)) {
+			return [
+				'total'         => 0,
+				'students'      => [],
+				'missing_users' => [],
+			];
+		}
+
+		foreach ($course_ids as $course_id) {
+			$course_id   = absint($course_id);
+			$course_name = get_the_title($course_id);
+			$user_ids    = $this->parse_course_user_ids($course_id);
+
+			if (empty($user_ids)) {
+				continue;
+			}
+
+			foreach ($user_ids as $user_id) {
+				$user = get_user_by('id', $user_id);
+
+				if (!$user) {
+					if (!isset($missing_users[$user_id])) {
+						$missing_users[$user_id] = [
+							'user_id' => $user_id,
+							'courses' => [],
+						];
+					}
+
+					$missing_users[$user_id]['courses'][$course_id] = [
+						'course_id'   => $course_id,
+						'course_name' => $course_name,
+					];
+
+					continue;
+				}
+
+				if (!isset($students[$user_id])) {
+					$students[$user_id] = [
+						'user_id'   => $user_id,
+						'user_name' => $this->get_user_label($user_id),
+						'courses'   => [],
+					];
+				}
+
+				$students[$user_id]['courses'][$course_id] = [
+					'course_id'   => $course_id,
+					'course_name' => $course_name,
+				];
+			}
+		}
+
+		return [
+			'total'         => count($students),
+			'students'      => array_values($students),
+			'missing_users' => array_values($missing_users),
+		];
+	}
+
+	private function get_woocommerce_orders_today_count() {
+		if (!function_exists('wc_get_orders')) {
+			return 0;
+		}
+
+		$window = $this->get_stockholm_window();
+
+		$orders = wc_get_orders([
+			'limit'        => -1,
+			'status'       => ['processing', 'completed'],
+			'date_created' => $window['start_utc'] . '...' . $window['end_utc'],
+			'return'       => 'ids',
+		]);
+
+		return is_array($orders) ? count($orders) : 0;
+	}
+
+	private function get_learndash_transactions_today_count() {
+		global $wpdb;
+
+		$window = $this->get_stockholm_window();
+
+		$rows = $wpdb->get_col(
+			$wpdb->prepare(
+				"
+				SELECT ID
+				FROM {$wpdb->posts}
+				WHERE post_type = %s
+				AND post_status = %s
+				AND post_date_gmt >= %s
+				AND post_date_gmt < %s
+				",
+				'sfwd-transactions',
+				'publish',
+				$window['start_utc'],
+				$window['end_utc']
+			)
+		);
+
+		if (empty($rows)) {
+			return 0;
+		}
+
+		$count = 0;
+
+		foreach ($rows as $transaction_id) {
+			$transaction_id = absint($transaction_id);
+
+			$course_id = absint(get_post_meta($transaction_id, 'course_id', true));
+
+			if (!$course_id) {
+				$course_id = absint(get_post_meta($transaction_id, 'post_id', true));
+			}
+
+			if ($course_id) {
+				$count++;
+			}
+		}
+
+		return $count;
+	}
+
+	private function get_stats() {
+		$students_debug = $this->get_students_debug_data();
+
+		return [
+			'website_name'      => $this->get_website_name(),
+			'students_total'    => (int) $students_debug['total'],
+			'shop_today'        => $this->get_woocommerce_orders_today_count(),
+			'memberships_today' => $this->get_learndash_transactions_today_count(),
+			'students_debug'    => $students_debug,
+		];
+	}
+
+	private function get_email_html($stats) {
+		$website_name      = esc_html($stats['website_name']);
+		$students_total    = number_format_i18n((int) $stats['students_total']);
+		$shop_today        = number_format_i18n((int) $stats['shop_today']);
+		$memberships_today = number_format_i18n((int) $stats['memberships_today']);
+
+		ob_start();
+		?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title><?php echo $website_name; ?></title>
+</head>
+<body style="margin:0; padding:20px; background:#f4f6f9; font-family:Arial, Helvetica, sans-serif;">
+	<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4f6f9;">
+		<tr>
+			<td align="center" style="padding:20px 10px;">
+				<table role="presentation" width="480" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); overflow:hidden;">
+					<tr>
+						<td style="background:linear-gradient(135deg, #1a73e8, #0d47a1); padding:24px 30px;">
+							<h1 style="margin:0; color:#ffffff; font-size:22px; font-weight:700;"><?php echo $website_name; ?></h1>
+						</td>
+					</tr>
+					<tr>
+						<td style="padding:24px 30px 30px;">
+							<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse; font-size:15px;">
+								<tr>
+									<td style="padding:14px 16px; border-bottom:1px solid #e8eaed; color:#202124; font-weight:600;">Students total</td>
+									<td style="padding:14px 16px; border-bottom:1px solid #e8eaed; color:#202124; text-align:right; font-weight:700; font-size:18px;"><?php echo $students_total; ?></td>
+								</tr>
+								<tr>
+									<td style="padding:14px 16px; border-bottom:1px solid #e8eaed; color:#202124; font-weight:600; background:#fafbfc;">Shop today</td>
+									<td style="padding:14px 16px; border-bottom:1px solid #e8eaed; color:#202124; text-align:right; font-weight:700; font-size:18px; background:#fafbfc;"><?php echo $shop_today; ?></td>
+								</tr>
+								<tr>
+									<td style="padding:14px 16px; border-bottom:1px solid #e8eaed; color:#202124; font-weight:600;">Memberships today</td>
+									<td style="padding:14px 16px; border-bottom:1px solid #e8eaed; color:#202124; text-align:right; font-weight:700; font-size:18px;"><?php echo $memberships_today; ?></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
+		<?php
+		return ob_get_clean();
+	}
+
+	private function send_email_now() {
+		$stats   = $this->get_stats();
+		$subject = $stats['website_name'] . ' - Daily Report';
+		$body    = $this->get_email_html($stats);
+		$headers = ['Content-Type: text/html; charset=UTF-8'];
+
+		return wp_mail(self::RECIPIENT, $subject, $body, $headers);
+	}
+
+	public function send_hourly_email() {
+		$this->send_email_now();
+	}
+
+	public function preview_email() {
+		if (!current_user_can('manage_options')) {
+			wp_die('Unauthorized');
+		}
+
+		check_admin_referer('skb_dse_preview');
+
+		echo $this->get_email_html($this->get_stats());
+		exit;
+	}
+
+	public function send_test_email() {
+		if (!current_user_can('manage_options')) {
+			wp_die('Unauthorized');
+		}
+
+		check_admin_referer('skb_dse_send_test');
+
+		$this->send_email_now();
+
+		wp_safe_redirect(admin_url('tools.php?page=skb-daily-stats-email&sent=1'));
+		exit;
+	}
+
+	public function admin_page() {
+		if (!current_user_can('manage_options')) {
+			return;
+		}
+
+		$stats          = $this->get_stats();
+		$students_debug = $stats['students_debug'];
+
+		$preview_url = wp_nonce_url(
+			admin_url('admin-post.php?action=skb_dse_preview'),
+			'skb_dse_preview'
+		);
+
+		$send_url = wp_nonce_url(
+			admin_url('admin-post.php?action=skb_dse_send_test'),
+			'skb_dse_send_test'
+		);
+		?>
+		<div class="wrap">
+			<h1>Daily Stats Email</h1>
+
+			<?php if (isset($_GET['sent']) && $_GET['sent'] === '1') { ?>
+				<div class="notice notice-success is-dismissible">
+					<p>Test email sent.</p>
+				</div>
+			<?php }; ?>
+
+			<p>
+				<a href="<?php echo esc_url($preview_url); ?>" class="button" target="_blank">Preview Email</a>
+				<a href="<?php echo esc_url($send_url); ?>" class="button button-primary">Send Test Email</a>
+			</p>
+
+			<h2>Main Stats</h2>
+			<table class="widefat striped" style="max-width:700px;">
+				<tbody>
+					<tr>
+						<td><strong>Website Title</strong></td>
+						<td><?php echo esc_html($stats['website_name']); ?></td>
+					</tr>
+					<tr>
+						<td><strong>Students total</strong></td>
+						<td><?php echo esc_html($stats['students_total']); ?></td>
+					</tr>
+					<tr>
+						<td><strong>Shop today</strong></td>
+						<td><?php echo esc_html($stats['shop_today']); ?></td>
+					</tr>
+					<tr>
+						<td><strong>Memberships today</strong></td>
+						<td><?php echo esc_html($stats['memberships_today']); ?></td>
+					</tr>
+				</tbody>
+			</table> 
+			 
+		</div>
+		<?php
+	}
+}
+
+new SKB_Daily_Stats_Email();
