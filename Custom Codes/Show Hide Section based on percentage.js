@@ -4,7 +4,7 @@ function getPercentageFromURL() {
     // Get query string
     const urlParams = new URLSearchParams(window.location.search);
     // Get 'mark' parameter value and parse to integer
-    const percentage = parseInt(parseFloat(urlParams.get('mark'))); 
+    const percentage = parseInt(parseFloat(urlParams.get('mark')));  
     return isNaN(percentage) ? 0 : percentage;
 }
 
