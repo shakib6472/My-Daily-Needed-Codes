@@ -6,7 +6,7 @@ add_shortcode('child_terms', function ($atts) {
 	$atts = shortcode_atts(array(
 		'taxonomy' => 'category',
 		'parent' => '',
-		'hide_empty' => '0',  
+		'hide_empty' => '0',   
 		'orderby' => 'name',
 		'order' => 'ASC',
 		'no_message' => 'No Sub States for this Country',
